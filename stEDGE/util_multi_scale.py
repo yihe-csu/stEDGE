@@ -3,41 +3,87 @@ import numpy as np
 import squidpy as sq
 import anndata as ad
 import scanpy as sc
+from joblib import Parallel, delayed
 
-def radius_representation(adata, use_rep="leiden", n_scales=4, nn_para=15,include_self=True, group_norm=False):
+
+def _compute_neighbors_block(start, end, indptr, indices, labels, n_types):
+    block = np.zeros((end - start, n_types), dtype=np.int32)
+    for row_offset, cell_idx in enumerate(range(start, end)):
+        cur_neighbors = indices[indptr[cell_idx] : indptr[cell_idx + 1]]
+        block[row_offset, :] = np.bincount(labels[cur_neighbors], minlength=n_types)
+    return start, block
+
+
+def radius_representation(
+    adata,
+    use_rep="leiden",
+    n_scales=4,
+    nn_para=15,
+    include_self=True,
+    group_norm=False,
+    n_jobs=-1,
+    block_size=4096,
+):
     cls_array = adata.obs[use_rep]
-    ME_var_names_np_unique  = np.array(adata.obs[use_rep].cat.categories)
+    ME_var_names_np_unique = np.array(adata.obs[use_rep].cat.categories)
+    labels = cls_array.cat.codes.to_numpy()
 
-    ME_X_prev = np.zeros(shape=(cls_array.shape[0],ME_var_names_np_unique.shape[0]))
+    ME_X_prev = np.zeros(shape=(cls_array.shape[0], ME_var_names_np_unique.shape[0]))
 
     for i in range(n_scales):
-
         cur_scale = i
-        print(f'scale {cur_scale}')
+        print(f"scale {cur_scale}")
 
-        sq.gr.spatial_neighbors(adata,coord_type='generic',radius=nn_para*(cur_scale+1),set_diag=include_self)
-        I = adata.obsp['spatial_connectivities']
-        ME_X = np.zeros(shape=(cls_array.shape[0],ME_var_names_np_unique.shape[0]))
-        
-        for i in range(I.shape[0]):
-            cur_neighbors = I[i,:].nonzero()[1]
+        sq.gr.spatial_neighbors(
+            adata, coord_type="generic", radius=nn_para * (cur_scale + 1), set_diag=include_self
+        )
+        I = adata.obsp["spatial_connectivities"].tocsr()
+        indptr = I.indptr
+        indices = I.indices
+        n_cells = I.shape[0]
+        n_types = ME_var_names_np_unique.shape[0]
+        ME_X = np.zeros(shape=(n_cells, n_types), dtype=np.int32)
 
-            cur_neighbors_cls = cls_array.iloc[cur_neighbors]
-            cur_cls_unique,cur_cls_count = np.unique(cur_neighbors_cls,return_counts=1) #counting for each cluster
-            cur_cls_idx = [np.where(ME_var_names_np_unique==c)[0][0] for c in cur_cls_unique] #c is string
-            ME_X[i,cur_cls_idx] = cur_cls_count
-        cur_ME_key = f'scale{cur_scale}'
+        if n_jobs == 1:
+            starts = list(range(0, n_cells, block_size))
+            for start in starts:
+                end = min(start + block_size, n_cells)
+                _, block = _compute_neighbors_block(start, end, indptr, indices, labels, n_types)
+                ME_X[start:end, :] = block
+        else:
+            starts = list(range(0, n_cells, block_size))
+            print(
+                f">>> Parallel neighbor computation: n_jobs={n_jobs}, "
+                f"blocks={len(starts)}, block_size={block_size}"
+            )
+            start_time = time.time()
+            results = Parallel(n_jobs=n_jobs, prefer="processes", batch_size=1)(
+                delayed(_compute_neighbors_block)(
+                    start, min(start + block_size, n_cells), indptr, indices, labels, n_types
+                )
+                for start in starts
+            )
+            for start, block in results:
+                end = start + block.shape[0]
+                ME_X[start:end, :] = block
+            print(f">>> Neighbor computation completed in {time.time() - start_time:.2f} seconds")
+        cur_ME_key = f"scale{cur_scale}"
 
         cur_X = ME_X - ME_X_prev
         ME_X_prev = ME_X
-        
+
         actual_r = nn_para * (cur_scale + 1)
-        print(f'scale {cur_scale}, median #cells per radius (r={actual_r}):',np.median(np.sum(cur_X, axis=1)))
+        print(
+            f"scale {cur_scale}, median #cells per radius (r={actual_r}):",
+            np.median(np.sum(cur_X, axis=1)),
+        )
 
         adata.obsm[cur_ME_key] = cur_X.copy()
         if group_norm:
-            adata.obsm[cur_ME_key] = adata.obsm[cur_ME_key]/np.sum(adata.obsm[cur_ME_key],axis=1,keepdims=True)
-            adata.obsm[cur_ME_key] = np.nan_to_num(adata.obsm[cur_ME_key],0)
+            adata.obsm[cur_ME_key] = adata.obsm[cur_ME_key] / np.sum(
+                adata.obsm[cur_ME_key], axis=1, keepdims=True
+            )
+            adata.obsm[cur_ME_key] = np.nan_to_num(adata.obsm[cur_ME_key], 0)
     generate_ct_representation(adata, use_rep=use_rep, n_scales=n_scales)
 
 
@@ -82,4 +128,3 @@ def generate_ct_representation(adata, use_rep="leiden", n_scales=4):
     print(">>> adata.obsm['whole'] generated !")
     print(">>> adata.obsm['X_pca'] generated (use_rep=adata.obsm['whole'])!")
     print(">>> adata.obsm['leiden_scale'] generated!")
-
