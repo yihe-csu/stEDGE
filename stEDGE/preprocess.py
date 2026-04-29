@@ -16,7 +16,6 @@ from tqdm import tqdm
 
 
 
-
 def mclust_R(data, n_clusters, random_seed=42):
     """\
     Clustering using the mclust algorithm.
