@@ -1,0 +1,7 @@
+__pycache__/ 
+.ipynb_checkpoints/ 
+.vscode/ 
+Data/ 
+"experimental result/" 
+*.h5ad 
+*.csv
