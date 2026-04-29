@@ -1829,3 +1829,15 @@ def _expand_square(A, new_n):
     B = np.zeros((new_n, new_n), dtype=A.dtype)
     B[:old_n, :old_n] = A
     return B
+
+
+def _expand_square_test(A, new_n):
+    old_n = A.shape[0]
+    if new_n <= old_n:
+        return A
+    B = np.zeros((new_n, new_n), dtype=A.dtype)
+    B[:old_n, :old_n] = A
+    return B
+
+
+# test
