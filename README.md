@@ -39,29 +39,30 @@ conda create -n stEDGE python=3.12.5
 conda activate stEDGE
 ```
 
-### Step 2. Install dependency packages
-
-```
-pip install -r requirements.txt
-```
-
-### Step 3. Install stEDGE
-
-For local installation, we recommend editable mode:
+### Step 2. Install stEDGE from PyPI
 
 ```bash
+pip install stEDGE
+```
+
+The installation is completed if `stEDGE` can be imported successfully:
+
+```python
+import stEDGE
+print(stEDGE.__version__)
+```
+
+### Optional: Install the development version from GitHub
+
+For local development or access to the latest source code, clone the GitHub repository and install `stEDGE` in editable mode:
+
+```bash
+git clone https://github.com/yihe-csu/stEDGE.git
+cd stEDGE
 pip install -e .
 ```
 
-Alternatively, you can install `stEDGE` using the setup script:
-
-```bash
-pip install setuptools==58.2.0
-python setup.py build
-python setup.py install
-```
-
-The environment configuration is then completed.
+---
 
 ## Tutorials
 
@@ -72,6 +73,8 @@ https://stedge-tutorials.readthedocs.io/en/latest/
 Tutorial source repository:
 
 https://github.com/yihe-csu/stEDGE_Tutorials
+
+---
 
 ## Citation
 

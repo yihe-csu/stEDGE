@@ -6,7 +6,7 @@ and transition interfaces in spatial transcriptomics.
 
 __author__ = "Yi He"
 __email__ = "yihe_csu@csu.edu.cn"
-__version__ = "1.1.1"
+__version__ = "1.1.2"
 
 import importlib
 
