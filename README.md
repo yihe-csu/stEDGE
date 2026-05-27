@@ -1,5 +1,7 @@
 # **stEDGE: Edge-guided multiscale reconstruction of hierarchical spatial domains and transition interfaces in spatial transcriptomics**
 
+[![Documentation Status](https://readthedocs.org/projects/stedge-tutorials/badge/?version=latest)](https://stedge-tutorials.readthedocs.io/en/latest/)
+
 <p align="center">
   <img src="./docs/Logo.png" alt="stEDGE logo" width="50%" />
 </p>
@@ -45,29 +47,31 @@ pip install -r requirements.txt
 
 ### Step 3. Install stEDGE
 
+For local installation, we recommend editable mode:
+
+```bash
+pip install -e .
 ```
+
+Alternatively, you can install `stEDGE` using the setup script:
+
+```bash
 pip install setuptools==58.2.0
 python setup.py build
 python setup.py install
-```
-
-Alternatively, for development mode:
-
-```
-pip install -e .
 ```
 
 The environment configuration is then completed.
 
 ## Tutorials
 
-Tutorials are provided in the documentation folder and cover representative applications of `stEDGE`.
+For installation instructions and step-by-step tutorials, please refer to the online documentation:
 
-- **Tutorial 1:** step-by-step analysis of mouse embryo MOSTA data.
-- **Tutorial 2:** transition-aware reconstruction of Crohn’s disease Visium data.
-- **Tutorial 3:** hierarchical reconstruction of human breast cancer Visium data.
-- **Tutorial 4:** layer-based reconstruction of mouse cerebellum Slide-seqV2 data.
-- **Tutorial 5:** cell-resolved reconstruction of human fibrotic lung Xenium data.
+https://stedge-tutorials.readthedocs.io/en/latest/
+
+Tutorial source repository:
+
+https://github.com/yihe-csu/stEDGE_Tutorials
 
 ## Citation
 
