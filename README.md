@@ -76,6 +76,19 @@ https://github.com/yihe-csu/stEDGE_Tutorials
 
 ---
 
+## Recommended parameter settings
+
+The following table provides platform-level parameter presets used in the current `stEDGE` tutorials. These settings are intended as recommended starting points for different spatial transcriptomics platforms and can be adjusted according to tissue complexity, spatial resolution, and the expected granularity of spatial domains.
+
+| Platform    | Consensus interval | Seed detection                                               | Hierarchy                                        |
+| ----------- | ------------------ | ------------------------------------------------------------ | ------------------------------------------------ |
+| Stereo-seq  | `(1.0, 3.0, 0.1)`  | `seed_quantile=0.45`, `seed_n_neighbors=6`, `min_seed_size=5` | `min_sim_quantile=0.95`, `coarse_resolution=1.0` |
+| 10x Visium  | `(0.1, 2.0, 0.1)`  | `seed_quantile=0.35`, `seed_n_neighbors=6`, `min_seed_size=0` | `min_sim_quantile=0.8`, `coarse_resolution=1.0`  |
+| Slide-seqV2 | `(0.1, 1.0, 0.1)`  | `seed_quantile=0.15`, `seed_n_neighbors=6`, `min_seed_size=40` | `min_sim_quantile=0.8`, `coarse_resolution=1.0`  |
+| Xenium      | `(0.1, 1.0, 0.1)`  | `seed_quantile=0.45`, `seed_n_neighbors=6`, `min_seed_size=140` | `min_sim_quantile=0.8`, `coarse_resolution=1.0`  |
+
+For high-resolution or cell-resolved datasets, such as Slide-seqV2 and Xenium, we recommend using multiscale neighborhood representation before running the full `stEDGE` workflow.
+
 ## Citation
 
 If you use `stEDGE` in your work, please cite:
