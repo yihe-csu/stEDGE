@@ -9,6 +9,7 @@ __email__ = "yihe_csu@csu.edu.cn"
 __version__ = "1.1.2"
 
 import importlib
+from .stEDGE import StEDGE
 
 _SUBMODULES = {
     "utils",
@@ -19,11 +20,9 @@ _SUBMODULES = {
     "stEDGE",
 }
 
-
 def __getattr__(name):
     if name in _SUBMODULES:
         return importlib.import_module(f"{__name__}.{name}")
     raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
-
-__all__ = list(_SUBMODULES)
+__all__ = ["StEDGE", *_SUBMODULES]
