@@ -15,7 +15,7 @@ The human intestinal datasets from Crohn’s disease patients (Data 10–11) wer
 - Spatial transcriptomics data and analysis code:  
   https://zenodo.org/records/14509802
 
-The human breast cancer dataset (Data 12) was obtained from the 10x Genomics public spatial gene expression resources:
+The human breast cancer datasets (Data 12 and Data 16) were obtained from the 10x Genomics public spatial gene expression resources:
 
 - 10x Genomics public datasets:  
   https://support.10xgenomics.com/spatial-gene-expression/datasets
@@ -26,7 +26,7 @@ The mouse brain datasets, including hippocampus and cerebellum sections (Data 13
 - Broad Institute Single-Cell Portal:  
   https://singlecell.broadinstitute.org/single_cell/study/SCP815
 
-The Xenium dataset of human fibrotic lung tissue from systemic sclerosis-associated interstitial lung disease (SSc-ILD), including the SSc_1_1_2 section (Data 15), was obtained from Markov et al.:
+The Xenium datasets of human fibrotic lung tissue from systemic sclerosis-associated interstitial lung disease (SSc-ILD) (Data 15 and Data 17), including sections SSc_1_1_2 and SSc_1_1_1, were obtained from Markov et al.:
 
 - NCBI GEO accession: GSE303048  
 - NCBI GEO:  

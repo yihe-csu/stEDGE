@@ -52,6 +52,7 @@ import stEDGE
 print(stEDGE.__version__)
 ```
 
+
 ### Optional: Install the development version from GitHub
 
 For local development or access to the latest source code, clone the GitHub repository and install `stEDGE` in editable mode:
@@ -62,7 +63,17 @@ cd stEDGE
 pip install -e .
 ```
 
----
+## Quick start
+
+```python
+import stEDGE
+
+model = stEDGE.StEDGE(
+    output_dir="./results",
+    verbose=True,
+)
+```
+
 
 ## Tutorials
 
@@ -74,7 +85,15 @@ Tutorial source repository:
 
 https://github.com/yihe-csu/stEDGE_Tutorials
 
----
+
+## Data availability
+
+All datasets used in the study are publicly available. Dataset sources,
+accession information, and links are provided in:
+
+[`Dataset/readme.md`](./Dataset/readme.md)
+
+
 
 ## Recommended parameter settings
 
