@@ -57,14 +57,12 @@ The script does not run the notebook's Evaluation or Save results sections. It d
 
 ## Runtime
 
-The six-figure RunAll demo was tested on 2026-09-16 using the local `E9.5_E1S1.h5ad` file through the `--data` option:
-
 | Test condition | Value |
 | --- | --- |
 | CPU | Intel Core i7-12700H; 14 physical cores, 20 logical processors |
 | System memory | 34.1 GB |
 | Operating system | Windows 11, build 26200 |
-| Python | 3.12.5 (`SEDR` conda environment) |
+| Python | 3.12.5 |
 | stEDGE / Scanpy | 1.1.2 / 1.10.2 |
 | Measured elapsed time | **104.57 seconds** |
 
